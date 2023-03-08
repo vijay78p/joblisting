@@ -3,6 +3,7 @@ package com.mylearnings.joblisting.controllers;
 import com.mylearnings.joblisting.model.Post;
 import com.mylearnings.joblisting.repository.PostRepository;
 import com.mylearnings.joblisting.repository.SearchRepository;
+import com.mylearnings.joblisting.services.MongodbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -18,6 +19,8 @@ public class JobPostController {
     PostRepository postRepository;
     @Autowired
     SearchRepository searchRepository;
+    @Autowired
+    MongodbService mongodbService;
 
     @RequestMapping(value="/")
     @ApiIgnore
@@ -27,7 +30,7 @@ public class JobPostController {
 
     @GetMapping("/posts")
     public List<Post> getAllPost(){
-        return postRepository.findAll();
+        return mongodbService.getAllJobPost();//postRepository.findAll();
     }
     @GetMapping("/posts/{text}")
     public List<Post> searchByText(@PathVariable String text){
@@ -37,9 +40,7 @@ public class JobPostController {
 
     @PostMapping("/post")
     public Post addPost(@RequestBody  Post post){
-        return postRepository.save(post);
-
+        return mongodbService.addJobPost(post); //postRepository.save(post);
     }
-
 
 }
